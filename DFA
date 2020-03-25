@@ -1,0 +1,72 @@
+#include<iostream>
+#include<cstring>
+#include<fstream>
+using namespace std;
+ifstream in("dfa.in");
+ofstream out("dfa.out");
+int stari[1000];
+int t[1000][1000];
+int main()
+{
+    int i, m, n, j, q, x, y, k, l;
+    char s[100],ch,c;
+    in>>n>>m;
+    for(i=0; i<m; i++)
+    {
+        in>>ch;
+        s[i] = ch;
+    }
+    in>>q;
+    in>>k;
+    for(i=1; i<=k; i++)
+        in>>stari[i];
+    in>>l;
+    for(i=1; i<=l; i++)
+    {
+        in>>x;
+        in>>c;
+        in>>y;
+        t[x][y] = c;
+    }
+    for(i=0;i<n;i++)
+       {for(j=0;j<m;j++)
+            out<<t[i][j]<<' ';
+        out<<'\n';
+       }
+    char cuvant[100];
+    cin.get(cuvant,100);
+    int nu = 1;
+    for(i=0;i<strlen(cuvant);i++)
+    {
+        int intreg;
+        intreg = cuvant[i];
+        int exista = 0;
+        for(j=0;j<=m;j++)
+            if(t[q][j] == intreg)
+                {
+                    q = j;
+                    exista = 1;
+                }
+        if(exista == 0)
+            {
+                nu = 0;
+                break;
+            }
+    }
+    int final = 0;
+    if(nu == 0)
+        cout<<"FALSE";
+    else
+    {
+        for(i=1; i<=k; i++)
+            if(q == stari[i])
+                {
+                    cout<<"TRUE";
+                    final = 1;
+                    i = k+1;
+                }
+        if(final == 0)
+            cout<<"FALSE";
+    }
+    return 0;
+}
