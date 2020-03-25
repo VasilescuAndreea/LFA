@@ -1,0 +1,80 @@
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
+#include <iterator>
+#include <queue>
+using namespace std;
+ifstream in("nfa.in");
+ofstream out("nfa.out");
+int main()
+{
+    int n;
+    in>>n;
+    map<char, vector<int> > tranzitii[n];
+    int m;
+    in>>m;
+    char ch[m];
+    for(int i=0; i<m; i++){
+        in>>ch[i];
+    }
+    int q;
+    in>>q;
+    int k;
+    in>>k;
+    int stariValide[k];
+    for(int i=0; i<k; i++)
+            in>>stariValide[i];
+    int l;
+    in>>l;
+    int a;
+    char b;
+    int c;
+    for(int i=0; i<l; i++){
+        in>>a;
+        in>>b;
+        in>>c;
+        tranzitii[a][b].push_back(c);
+    }
+    string cuv;
+    in>>cuv;
+    queue< vector<int> > stari;
+    vector<int> temp;
+    temp.push_back(q);
+    temp.push_back(0);
+    stari.push(temp);
+    bool valid = false;
+    while(!stari.empty()){
+        vector<int> vect = stari.front();
+        stari.pop();
+        int nrStare = vect.at(0);
+        char caracter;
+        map<char, vector<int> >stare = tranzitii[nrStare];
+        int pozitie = vect.at(1);
+        for(int i = 0; i<stare['$'].size(); i++){
+            vector<int> temp;
+            temp.push_back(stare['$'].at(i));
+            temp.push_back(vect.at(1));
+            stari.push(temp);
+        }
+        if(pozitie == cuv.length()){
+            for(int i = 0; i<k; i++)
+                if(stariValide[i] == nrStare){
+                    valid = true;
+                    break;
+                }
+            continue;
+        }
+        else
+            caracter = cuv.at(pozitie);
+        for(int i=0; i<stare[caracter].size(); i++){
+            vector<int> temp;
+            temp.push_back(stare[caracter].at(i));
+            temp.push_back(pozitie + 1);
+            stari.push(temp);
+        }
+
+    }
+    cout<<(valid ? "TRUE":"FALSE");
+    return 0;
+}
